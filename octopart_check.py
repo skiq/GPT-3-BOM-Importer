@@ -66,6 +66,7 @@ def match_mpns(client, mpns):
                     name
                 }
                 mpn
+                octopart_url
             }
         }
     }
@@ -80,7 +81,10 @@ def match_mpns(client, mpns):
             'reference': mpn,
         })
     resp = client.execute(dsl, {'queries': queries})
-    print(resp)
+    # print(resp)
+    # print("")
+    # print(json.loads(resp)['data']['multi_match'])
+    # print("")
     return json.loads(resp)['data']['multi_match']
 
 # def demo_part_get(client):
@@ -103,12 +107,44 @@ def demo_match_mpns(client):
     matches = match_mpns(client, mpns)
 
     for match in matches:
+        print(match)
         for part in match['parts']:
-            print(match['reference'], '\t',match['hits'], '\t', part['manufacturer']['name'], '\t', part['mpn'])
+            print(match['reference'], '\t',match['hits'], '\t', part['manufacturer']['name'], '\t', part['mpn'], part['octopart_url'])
+
+def demo_match_mpn(client,mpn):
+    print('\n---------------- demo_match_mpns')
+    mpns = [mpn]
+    matches = match_mpns(client, mpns)
+    match = matches[0]
+
+    print(match)
+    if match["hits"] == 0:
+        return
+    else:
+        for part in match['parts']:
+            part['manufacturer_name'] = part['manufacturer']['name']
+        return match
+
+    """
+    How to use:
+
+    match = demo_match_mpn(client,'LMC6482IMX/NOPB')
+    if match is not null:
+        for part in match['parts']:
+            print(match['reference'], '\t',match['hits'], '\t', part['manufacturer_name'], '\t', part['mpn'], '\t', part['octopart_url'])
+    else:
+        print("Not found")
+
+    reference: provided number
+    hits: number of parts found
+    manufacturer_name: part manufacturer name
+    octopart_url: part URL
+    """
 
 if __name__ == '__main__':
     client = GraphQLClient('https://octopart.com/api/v4/endpoint')
     # client.inject_token(os.getenv('OCTOPART_TOKEN'))
     client.inject_token("1b4cc2d2-4221-4fc5-852d-ff9d211c1c4c")
     # demo_part_get(client)
-    demo_match_mpns(client)
+    demo_match_mpn(client,'XXXXXX12-5S-1SH(55)')
+    demo_match_mpn(client,'LMC6482IMX/NOPB')
