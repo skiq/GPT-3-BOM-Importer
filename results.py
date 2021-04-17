@@ -89,7 +89,7 @@ def append_excel_with_mpns_get_csv(original_excel,mpn_candidates):
 def get_result_csv(original_excel_file,mpns):
     remove_invalid_mpns(mpns)
     append_excel_with_mpns_get_csv(original_excel_file,mpns)
-    return original_excel_file.strip(".xls")[0] + ".csv"
+    return original_excel_file.split(".xls")[0] + ".csv"
 
 """
 takes list as input and deletes all invalid MPNs
@@ -138,7 +138,7 @@ if __name__ == '__main__':
     original_excel_file = '/Users/swenkoller/Desktop/GPT3 Makeathon/Code/data/24.01.2019_GZ 4136 1200b _(_vi_BOM_CSV_Komma).xlsx'
     # append_excel_with_mpns_get_csv(original_excel_file,mpns)
 
-    get_result_csv(original_excel_file,mpns)
+    print(get_result_csv(original_excel_file,mpns))
 
 
     # print("mpn_blank_ratio")
