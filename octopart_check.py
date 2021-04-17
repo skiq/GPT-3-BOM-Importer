@@ -2,7 +2,7 @@ from six.moves import urllib
 import json
 import os
 
-# copy pasted from: https://github.com/prisma-labs/python-graphql-client/blob/master/graphqlclient/client.py
+# adapted from https://octopart.com/api/v4/getting-started
 class GraphQLClient:
     def __init__(self, endpoint):
         self.endpoint = endpoint
@@ -35,26 +35,6 @@ class GraphQLClient:
             print('')
             raise e
 
-# def get_parts(client, ids):
-#     query = '''
-#     query get_parts($ids: [String!]!) {
-#         parts(ids: $ids) {
-#             id
-#             manufacturer {
-#                 name
-#             }
-#             mpn
-#             category {
-#                 name
-#             }
-#         }
-#     }
-#     '''
-#
-#     ids = [str(id) for id in ids]
-#     resp = client.execute(query, {'ids': ids})
-#     return json.loads(resp)['data']['parts']
-
 def match_mpns(client, mpns):
     dsl = '''
     query match_mpns($queries: [PartMatchQuery!]!) {
@@ -81,58 +61,39 @@ def match_mpns(client, mpns):
             'reference': mpn,
         })
     resp = client.execute(dsl, {'queries': queries})
-    # print(resp)
-    # print("")
-    # print(json.loads(resp)['data']['multi_match'])
-    # print("")
     return json.loads(resp)['data']['multi_match']
 
-# def demo_part_get(client):
-#     print('\n---------------- demo_part_get')
-#     ids = ["1", "2", "asdf", "4"]
-#     parts = get_parts(client, ids)
-#
-#     for id, part in zip(ids, parts):
-#         print(id, '\t', part)
 
-def demo_match_mpns(client):
-    print('\n---------------- demo_match_mpns')
-    mpns = [
-        'CC4V-T1A 32.768KHZ +-20PPM 9PF',
-        'LMC6482IMX/NOPB',
-        'PCF8583T/F5,112',
-        'C0603C473M1REC',
-        'XXXXXX12-5S-1SH(55)',
-    ]
-    matches = match_mpns(client, mpns)
+"""
+Input: MPN string.
 
-    for match in matches:
-        print(match)
-        for part in match['parts']:
-            print(match['reference'], '\t',match['hits'], '\t', part['manufacturer']['name'], '\t', part['mpn'], part['octopart_url'])
+Return:
+Null if no match. List of parts with a dictionary each, if it matched.
 
-def demo_match_mpn(client,mpn):
-    print('\n---------------- demo_match_mpns')
-    mpns = [mpn]
-    matches = match_mpns(client, mpns)
-    match = matches[0]
+How to use:
 
-    print(match)
-    if match["hits"] == 0:
-        return
-    else:
-        for part in match['parts']:
-            part['manufacturer_name'] = part['manufacturer']['name']
-        return match
+match = match_single_mpn('LMC6482IMX/NOPB')
+if match is not None:
+    for part in match['parts']:
+        print(match['reference'], '\t',match['hits'], '\t', part['manufacturer_name'], '\t', part['mpn'], '\t', part['octopart_url'])
+else:
+    print("Not found")
 
+reference: provided number
+hits: number of parts found
+manufacturer_name: part manufacturer name
+mpn: Octopart MPN
+octopart_url: part URL
+"""
 def match_single_mpn(mpn):
-    client = GraphQLClient('https://octopart.com/api/v4/endpoint')
-    print('\n---------------- demo_match_mpns')
+    client = GraphQLClient('https://octopart.com/api/v4/endpoint'
+    # client.inject_token(os.getenv('OCTOPART_TOKEN'))
+    client.inject_token("1b4cc2d2-4221-4fc5-852d-ff9d211c1c4c")
     mpns = [mpn]
     matches = match_mpns(client, mpns)
     match = matches[0]
 
-    print(match)
+    # print(match)
     if match["hits"] == 0:
         return
     else:
@@ -140,26 +101,63 @@ def match_single_mpn(mpn):
             part['manufacturer_name'] = part['manufacturer']['name']
         return match
 
-    """
-    How to use:
 
+
+"""
+Input:
+Takes a list of mpns as an input (must be strings).
+
+Return:
+For each MPN, if there is a match, it returns a list of parts.
+If there is no match, it returns an empty list.
+For cases where there is no match, it returns a list of parts.
+Each part is a dictioary with multiple values.
+
+How to use:
+
+matches = match_multiple_mpn(['LMC6482IMX/NOPB','XYZ6482IMX/NOPB','PCF8583T/F5,112'])
+
+for match in matches:
+
+    # check if there is a part matched
+    if len(match) is not 0:
+        # if so, get the info from the parts
+        for part in match['parts']:
+            print(match['reference'], '\t',match['hits'], '\t', part['manufacturer_name'], '\t', part['mpn'], '\t', part['octopart_url'])
+    # if len = 0, it means this MPN had no match
+    else:
+        print("Not found")
+
+reference: provided input MPN
+hits: number of parts found
+manufacturer_name: part manufacturer name
+mpn: true MPN from Octopart
+octopart_url: part URL
+"""
+
+def match_multiple_mpn(mpns):
+    client = GraphQLClient('https://octopart.com/api/v4/endpoint')
+    # client.inject_token(os.getenv('OCTOPART_TOKEN'))
+    client.inject_token("1b4cc2d2-4221-4fc5-852d-ff9d211c1c4c")
+    matches = match_mpns(client, mpns)
+    match = matches[0]
+
+    matches_list = []
+    for match in matches:
+        if match["hits"] == 0:
+            matches_list.append([])
+        else:
+            # standardize naming
+            for part in match['parts']:
+                part['manufacturer_name'] = part['manufacturer']['name']
+            matches_list.append(match)
+    return matches_list
+
+
+if __name__ == '__main__':
     match = match_single_mpn('LMC6482IMX/NOPB')
-    if match is not null:
+    if match is not None:
         for part in match['parts']:
             print(match['reference'], '\t',match['hits'], '\t', part['manufacturer_name'], '\t', part['mpn'], '\t', part['octopart_url'])
     else:
         print("Not found")
-
-    reference: provided number
-    hits: number of parts found
-    manufacturer_name: part manufacturer name
-    octopart_url: part URL
-    """
-
-if __name__ == '__main__':
-    client = GraphQLClient('https://octopart.com/api/v4/endpoint')
-    # client.inject_token(os.getenv('OCTOPART_TOKEN'))
-    client.inject_token("1b4cc2d2-4221-4fc5-852d-ff9d211c1c4c")
-    # demo_part_get(client)
-    demo_match_mpn(client,'XXXXXX12-5S-1SH(55)')
-    demo_match_mpn(client,'LMC6482IMX/NOPB')
