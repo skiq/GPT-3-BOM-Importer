@@ -155,7 +155,7 @@ def match_multiple_mpn(mpns):
 
 
 if __name__ == '__main__':
-    match = match_single_mpn('LMC6482IMX/NOPB')
+    match = match_single_mpn('C9')
     if match is not None:
         for part in match['parts']:
             print(match['reference'], '\t',match['hits'], '\t', part['manufacturer_name'], '\t', part['mpn'], '\t', part['octopart_url'])
