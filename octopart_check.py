@@ -141,6 +141,37 @@ def demo_match_mpn(client,mpn):
     octopart_url: part URL
     """
 
+def match_single_mpn(mpn):
+    client = GraphQLClient('https://octopart.com/api/v4/endpoint')
+    print('\n---------------- demo_match_mpns')
+    mpns = [mpn]
+    matches = match_mpns(client, mpns)
+    match = matches[0]
+
+    print(match)
+    if match["hits"] == 0:
+        return
+    else:
+        for part in match['parts']:
+            part['manufacturer_name'] = part['manufacturer']['name']
+        return match
+
+    """
+    How to use:
+
+    match = match_single_mpn('LMC6482IMX/NOPB')
+    if match is not null:
+        for part in match['parts']:
+            print(match['reference'], '\t',match['hits'], '\t', part['manufacturer_name'], '\t', part['mpn'], '\t', part['octopart_url'])
+    else:
+        print("Not found")
+
+    reference: provided number
+    hits: number of parts found
+    manufacturer_name: part manufacturer name
+    octopart_url: part URL
+    """
+
 if __name__ == '__main__':
     client = GraphQLClient('https://octopart.com/api/v4/endpoint')
     # client.inject_token(os.getenv('OCTOPART_TOKEN'))
