@@ -86,7 +86,7 @@ mpn: Octopart MPN
 octopart_url: part URL
 """
 def match_single_mpn(mpn):
-    client = GraphQLClient('https://octopart.com/api/v4/endpoint'
+    client = GraphQLClient('https://octopart.com/api/v4/endpoint')
     # client.inject_token(os.getenv('OCTOPART_TOKEN'))
     client.inject_token("1b4cc2d2-4221-4fc5-852d-ff9d211c1c4c")
     mpns = [mpn]
