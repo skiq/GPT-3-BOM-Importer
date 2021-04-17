@@ -72,7 +72,7 @@ def append_excel_with_mpns_get_csv(original_excel,mpn_candidates):
         if len(mpn_candidates[rownum]) > 1:
             cell_values = sh.row_values(rownum)
             cell_values.append(mpn_candidates[rownum][1])
-            print(cell_values)
+            # print(cell_values)
             wr.writerow(cell_values)
         else:
             wr.writerow(sh.row_values(rownum))
@@ -83,22 +83,39 @@ def append_excel_with_mpns_get_csv(original_excel,mpn_candidates):
 """
 takes list as input and deletes all invalid MPNs
 """
-def remove_invalid_mpns(mpn_candidates):
+
+def remove_invalid_mpns_with_octopart(mpn_candidates):
     index = 0
 
     for candidate in mpn_candidates:
-        print("")
         index=+1
-        print(str(index))
         if len(candidate) > 1:
             match = match_single_mpn(candidate[1])
             if match is None:
-                print(candidate[1] + " is NOT a valid MPN")
                 del candidate[1]
-            # else:
-            #     print(match)
         else:
             continue
+
+def garbage_string(mpn_string):
+    if len(mpn_string) < 5:
+        return True
+    else:
+        return False
+
+def remove_invalid_mpns_other(mpn_candidates):
+    index = 0
+
+    for candidate in mpn_candidates:
+        index=+1
+        if len(candidate) > 1:
+            if garbage_string(candidate[1]):
+                del candidate[1]
+        else:
+            continue
+
+def remove_invalid_mpns(mpn_candidates):
+    remove_invalid_mpns_other(mpn_candidates)
+    remove_invalid_mpns_with_octopart(mpn_candidates)
 
 
 
