@@ -2,10 +2,21 @@ import xlrd
 import csv
 from octopart_check import match_single_mpn
 
+
+"""
+How to use
+
+from results import get_result_csv
+
+get_result_csv('FILE.xls',MPN_LIST)
+
+"""
+
+
+
 """
 takes as input a list of octopart results and indices
 """
-
 
 """
 # Input: array excel_indices, mpn_candidates
@@ -16,15 +27,6 @@ input:
 [1,FCA234234NL],
 [2,FLACA2334NL],
 …. ]
-"""
-
-"""
-How to use
-
-from results import get_result_csv
-
-get_result_csv('FILE.xls',MPN_LIST)
-
 """
 
 def number_of_mpns(mpn_candidates):
