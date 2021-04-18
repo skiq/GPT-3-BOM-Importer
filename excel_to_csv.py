@@ -55,8 +55,9 @@ Note:
 def csv_from_excel(file, sheet_index = 0, header_row = 0):
     wb = xlrd.open_workbook(file)
     sh = wb.sheet_by_index(sheet_index)
-    your_csv_file = open(file.split('.xls')[0] + ".txt", 'w')
-    wr = csv.writer(your_csv_file, delimiter='|', encoding='utf-8') #, quoting=csv.QUOTE_ALL
+    csv_filename = file.split('.xls')[0] + ".txt"
+    your_csv_file = open(csv_filename, 'w', encoding='utf-8')
+    wr = csv.writer(your_csv_file, delimiter='|') #, quoting=csv.QUOTE_ALL
 
     # max_width = sh.computed_column_width()
     for rownum in range(sh.nrows):
@@ -65,14 +66,16 @@ def csv_from_excel(file, sheet_index = 0, header_row = 0):
         wr.writerow(sh.row_values(rownum))
 
     your_csv_file.close()
+    return csv_filename
 
 # convert all files in any given folder from Excel to our csv format
 if __name__ == '__main__':
-    bom = '/Users/swenkoller/Desktop/GPT3 Makeathon/Code/data/Bill of Materials-D-Muster_Pyramid _V1(Standard).xlsx'
+    bom = '/Users/swenkoller/Desktop/GPT3 Makeathon/Code/data/PiCM_F_16BOM.xlsx'
 
-    header_index = get_header_line_index_from_xls(bom)
+    # header_index = get_header_line_index_from_xls(bom)
 
-    csv_from_excel(bom,header_row = header_index)
+    print(csv_from_excel(bom))
+
 
 
     # for filename in os.listdir("data/"):
