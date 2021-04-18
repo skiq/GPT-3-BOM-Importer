@@ -46,17 +46,23 @@ def get_header_line_index_from_xls(file):
 
 """
 convert excel workbook to pipe-separated txt file
+
+Input: path to xls or xlsx file
+Returns: path to new pipe-separated txt file
+
 drop all lines up until header row (disabled)
 
 Note:
 - saves file to same folder as input file
 - retains same name, just replaces extension with "txt"
+
 """
 def csv_from_excel(file, sheet_index = 0, header_row = 0):
     wb = xlrd.open_workbook(file)
     sh = wb.sheet_by_index(sheet_index)
     csv_filename = file.split('.xls')[0] + ".txt"
-    your_csv_file = open(csv_filename, 'w', encoding='utf-8')
+    your_csv_file = open(csv_filename, 'w')
+    # your_csv_file = open(csv_filename, 'w', encoding='utf-8')
     wr = csv.writer(your_csv_file, delimiter='|') #, quoting=csv.QUOTE_ALL
 
     # max_width = sh.computed_column_width()
@@ -70,7 +76,7 @@ def csv_from_excel(file, sheet_index = 0, header_row = 0):
 
 # convert all files in any given folder from Excel to our csv format
 if __name__ == '__main__':
-    bom = '/Users/swenkoller/Desktop/GPT3 Makeathon/Code/data/PiCM_F_16BOM.xlsx'
+    bom = '/Users/swenkoller/Desktop/GPT3 Makeathon/Code/data/653372_0000_Backplane IV_BOM.xlsx'
 
     # header_index = get_header_line_index_from_xls(bom)
 

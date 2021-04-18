@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+   
+    <title>MPN from BOM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;700&display=swap');
+        @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+        body {
+            color: black;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+
+        p {
+            line-height: 1.6em;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+
+        div {
+            text-align: center;
+        }
+
+        .l-content {
+            margin: 0 auto;
+        }
+
+        .l-box {
+            padding: 0.5em 1em;
+        }
+
+        .banner {
+            background-color: rgb(35, 40, 58);
+            /*background: transparent url('https://static.vecteezy.com/system/resources/previews/000/558/967/original/seamless-pattern-of-flamingo-with-slice-watermelon-doodle-style-on-white-background-vector-illustration.jpg') 0 0 no-repeat fixed;*/
+            background-size: 25%;
+            text-align: center;
+            background-size: cover;
+            height: 200px;
+            width: 100%;
+            margin-bottom: 3em;
+            display: table;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+
+        .banner-head {
+            display: table-cell;
+            vertical-align: middle;
+            margin-bottom: 0;
+            font-family: 'Noto Sans JP', sans-serif;
+            color: white;
+        }
+
+        .footer {
+            background: #111;
+            color: white;
+            text-align: center;
+        }
+
+            .footer a {
+                color: #ddd;
+            }
+
+        @media(min-width: 767px) {
+
+            .banner-head {
+                font-size: 4em;
+            }
+
+            .pricing-table {
+                margin-bottom: 0;
+            }
+        }
+
+        @media (min-width: 480px) {
+            .banner {
+                height: 400px;
+            }
+
+            .banner-head {
+                font-size: 3em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="banner">
+        <h1 class="banner-head">
+            MPN from BOM<br>
+            Created for Luminovo.ai
+        </h1>
+    </div>
+
+    <div class="l-content">
+
+
+        <br />
+        <br />
+
+
+        <div>
+
+            <h3 class="information-head">BOM processed successfully!</h3>
+            <p>
+                
+            </p>
+
+        </div>
+
+
+        <br />
+        <br />
+        <br />
+        <br />
+
+
+        <div>
+
+            <h3>Download the CSV with validated MPNs</h3>
+
+            <div class="container">
+                <a href="/return-files/{{value}}" target="blank"><button class='btn btn-default' style="width:200px">Download</button></a>
+            </div>
+
+        </div>
+
+
+        <br />
+        <br />
+        <br />
+
+
+    </div>
+
+
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+
+
+    <div class="footer l-box">
+        <p>
+            Built with love by team PBJ for the GPT-3 Makeathon
+        </p>
+    </div>
+
+</body>
+</html>
